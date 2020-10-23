@@ -1,0 +1,1 @@
+# captalism-bot
