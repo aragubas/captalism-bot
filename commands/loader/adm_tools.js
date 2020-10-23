@@ -75,6 +75,19 @@ function call(arguments, msg) {
 
                 break;
 
+            case "list_adms":
+                var CurrentADMList = storage.LoadFile("administrator_users").split('|');
+
+                var AllAdmStrings = "";
+
+                CurrentADMList.forEach(item => {
+                    AllAdmStrings += "<@" + item + ">\n";
+                });
+
+                global.ReplyMessage(AllAdmStrings, msg);
+
+                return;
+
             case "add_adm":
                 var UserIDToAdd = args[1];
                 var CurrentADMList = storage.LoadFile("administrator_users").split('|');

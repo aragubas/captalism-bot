@@ -33,10 +33,11 @@ function LoadFile(fileName, folder = "sys") {
         throw "FileData cannot be grather than 2000 characters.";
     }
 
-    return FileData;
+    return FileData.replace("$owner", global.Owner).replace("$prefix", global.Prefix);
 }
 
 exports.LoadFile = LoadFile;
+/////////////////////////////
 
 // WriteFile Function
 function WriteFile(fileName, fileData, folder = "sys") {
@@ -46,3 +47,20 @@ function WriteFile(fileName, fileData, folder = "sys") {
 }
 
 exports.WriteFile = WriteFile;
+///////////////////////////////
+function FileExists(fileName, folder = "sys") {
+    var Path = global.StartPath + "/storage/" + folder + "/" + fileName;
+
+    return fs.existsSync(Path);
+}
+
+exports.FileExists = FileExists;
+/////////////////////////////////
+function DeleteFile(fileName, folder = "sys") {
+    var Path = global.StartPath + "/storage/" + folder + "/" + fileName;
+
+    return fs.unlinkSync(Path);
+}
+
+exports.DeleteFile = DeleteFile;
+/////////////////////////////////

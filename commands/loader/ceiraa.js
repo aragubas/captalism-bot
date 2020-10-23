@@ -16,7 +16,7 @@
 
 // Command Function Call
 function call(arguments, msg) {
-    global.ReplyMessage("Ceira Ceira CEIRA CEEEIIIRRAAA", msg)
+    global.ReplyMessage(global.storage.LoadFile("ceiraa", "random_strings"), msg)
 }
 
 // Make the command callable

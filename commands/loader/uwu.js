@@ -29,7 +29,14 @@ function call(arguments, msg) {
                 var ImageName = arguments.split(",")[0].replace("add ", "");
                 var ImageContent = arguments.split(",")[1];
 
-                if (ImageContent == "") {
+                // Check if title isn't null
+                if (ImageName == undefined || ImageName == "") {
+                    global.ReplyMessage(global.storage.LoadFile("invalid_title_error", "uwu"), msg);
+                    return;
+                }
+
+                // Check if content isn't null
+                if (ImageContent == undefined || ImageContent == "") {
                     global.ReplyMessage(global.storage.LoadFile("invalid_link_error", "uwu"), msg);
                     return;
                 }
@@ -44,14 +51,14 @@ function call(arguments, msg) {
                 global.storage.WriteFile("matches/max.data", String(ImageID), "uwu")
 
                 // Create the Ticket for the added image
-                var ticketData = "ImageName: " + ImageName + "\n" +
-                    "ImageContent: " + ImageContent + "\n" +
-                    "ImageID: " + ImageID + "\n" +
-                    "UserID: " + msg.author.id + "\n" +
-                    "UserName: " + msg.author.username + "\n" +
-                    "UserDiscriminator: " + msg.author.discriminator + "\n" +
-                    "UserIsBot: " + msg.author.bot + "\n" +
-                    "UserCreated : " + msg.author.createdAt;
+                var ticketData = "Titulo: " + ImageName + "\n" +
+                    "Contudo: " + ImageContent + "\n\n" +
+                    "ID: " + ImageID + "\n" +
+                    "ID do Usuario: " + msg.author.id + "\n" +
+                    "Nome do Usuario: " + msg.author.username + "\n" +
+                    "Discriminador do Usuario: " + msg.author.discriminator + "\n" +
+                    "Usuario é um bot?: " + msg.author.bot + "\n" +
+                    "Data criação do usuario: " + msg.author.createdAt;
 
                 global.storage.WriteFile("tickets/" + String(ImageID) + ".data", ticketData, "uwu")
                 global.ReplyMessage(global.storage.LoadFile("ticket_created", "uwu"), msg);
@@ -62,20 +69,54 @@ function call(arguments, msg) {
                 var TicketID = args[1];
                 var ticketData = global.storage.LoadFile("tickets/" + String(TicketID), "uwu");
 
+                // Check if TicketId is an number
+                if (isNaN(TicketID)) {
+                    global.ReplyMessage(global.storage.LoadFile("invalid_ticket_id", "uwu"), msg);
+                    return;
+
+                }
+
+                // Check if ticket exists
+                if (!global.storage.FileExists(TicketID + ".data", "uwu/tickets")) {
+                    global.ReplyMessage(global.storage.LoadFile("ticket_does_not_exist", "uwu"), msg);
+                    return;
+                }
+
                 global.ReplyMessage(global.storage.LoadFile("ticket_info_view", "uwu"), msg);
                 msg.author.send(global.storage.LoadFile("ticket_view", "uwu").replace("{0}", ticketData))
 
                 return;
 
-            case "report":
-                var TicketID = args[1];
-                var ticketData = global.storage.LoadFile("tickets/" + String(TicketID), "uwu");
-
-                global.ReplyMessage(global.storage.LoadFile("ticket_info_view", "uwu"), msg);
-                msg.author.send(global.storage.LoadFile("ticket_view", "uwu").replace("{0}", ticketData))
-
+            case "total":
+                global.ReplyMessage(global.storage.LoadFile("total_msg", "uwu").replace("{0}", String(RandomMax)), msg);
                 return;
 
+            case "remove":
+                var ImageID = args[1];
+
+                // Check if user that is trying to remove the image is an Administrator
+                if (!global.UserIsAdministrator(msg)) {
+                    global.ReplyMessage(global.storage.LoadFile("remove_user_not_administrator", "uwu"), msg);
+                    return;
+                }
+
+                // Check if typed ID is an valid number
+                if (isNaN(ImageID)) {
+                    global.ReplyMessage(global.storage.LoadFile("id_is_not_number", "uwu"), msg);
+                    return;
+                }
+
+                // Check if Image Exists
+                if (!global.storage.FileExists(ImageID + ".data", "uwu/matches")) {
+                    global.ReplyMessage(global.storage.LoadFile("cannot_remove_unexistent_image", "uwu"), msg);
+                    return;
+                }
+
+                global.storage.DeleteFile(ImageID + ".data", "uwu/matches");
+                global.ReplyMessage(global.storage.LoadFile("image_removed", "uwu"), msg);
+
+
+                break;
 
             default:
                 if (args[0].startsWith("#")) {
@@ -97,11 +138,13 @@ function call(arguments, msg) {
 
                     }
 
-                }
-                ReplyImgID(MessageNumber, msg);
-                MessageCanSend = false;
+                    ReplyImgID(MessageNumber, msg);
+                    MessageCanSend = false;
+                    return;
 
-                return;
+                }
+                break;
+
         }
 
     }
@@ -119,11 +162,10 @@ function call(arguments, msg) {
             }
 
 
-            if (global.fs.existsSync("matches/" + String(MessageNumber) + ".data")) {
+            if (global.storage.FileExists(MessageNumber + ".data", "uwu/matches")) {
                 // If found an Image, display it
                 Found = true;
                 ReplyImgID(MessageNumber, msg);
-
                 return;
 
             } else {
@@ -143,7 +185,18 @@ function call(arguments, msg) {
 }
 
 function ReplyImgID(ImageID, msg) {
-    global.ReplyMessage("ID: " + String(ImageID) + "\n" + global.storage.LoadFile("matches/" + String(ImageID), "uwu"), msg);
+    // Check if message exists
+    if (!storage.FileExists(ImageID + ".data", "uwu/matches")) {
+        global.ReplyMessage(storage.LoadFile("image_not_found", "uwu").replace("{0}", ImageID), msg);
+        return;
+    }
+
+    var UwUContent = global.storage.LoadFile("matches/" + String(ImageID), "uwu");
+
+    var Message = "ID:" + String(ImageID) + "\n" + UwUContent;
+
+    global.ReplyMessage(Message, msg);
+
 }
 
 // Make the command callable

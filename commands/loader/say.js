@@ -16,8 +16,9 @@
 
 // Command Function Call
 function call(arguments, msg) {
-    // Startup Message
+    msg.delete();
     global.ReplyMessage(arguments, msg)
+
 
 }
 

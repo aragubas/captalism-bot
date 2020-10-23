@@ -41,6 +41,7 @@ global.StoragePath = StoragePath;
 // Load Strings
 global.InvalidCommandString = storage.LoadFile("invalid_command", "strings")
 global.Prefix = storage.LoadFile("prefix");
+global.Owner = storage.LoadFile("owner");
 
 
 /////////////////////////////////////////
@@ -151,14 +152,7 @@ function UserIsAdministrator(msg) {
     // Check current user level
     var SpecialUsers = storage.LoadFile("administrator_users").split('|');
 
-    if (SpecialUsers.indexOf(msg.author.id) != -1) {
-        // Check if UserID is bot owner
-        if (msg.author.id == storage.LoadFile("owner")) { return true; }
-        return false;
-    }
-
-
-    return true;
+    return SpecialUsers.indexOf(msg.author.id) != -1;
 }
 
 global.UserIsAdministrator = UserIsAdministrator;
@@ -167,16 +161,15 @@ function UserIsAdministratorByUserID(user_id) {
     // Check current user level
     var SpecialUsers = storage.LoadFile("administrator_users").split('|');
 
-    if (SpecialUsers.indexOf(user_id) != -1) {
-        // Check if UserID is bot owner
-        if (user_id == storage.LoadFile("owner")) { return true; }
-        return false;
-    }
-
-    return true;
+    return SpecialUsers.indexOf(user_id) != -1;
 }
 
 global.UserIsAdministratorByUserID = UserIsAdministratorByUserID;
-//////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+function ModuleExists(moduleName) {
+    return ListLoadedModules().indexOf(moduleName) != -1;
+}
+
+global.ModuleExists = ModuleExists;
 
 console.log("Done");

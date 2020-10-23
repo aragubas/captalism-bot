@@ -1,0 +1,5 @@
+Lista todos os modulos carregados.
+
+:speaking_head: Caso algum modulo dè erro na hora de inicializar,
+o bot irá parar de carregar os comandos até aquele ponto. Caso isso acontecer...
+Contate o Administrador do BOT na dm: <@$owner>
