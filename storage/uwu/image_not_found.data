@@ -1,4 +1,4 @@
-:warning: Não foi possivel achar a imagem ID: {0} :warning:
+:no_entry: Não foi possivel achar a imagem ID: {0} :no_entry:
 
 :speaking_head: Não Encontrou Esse?
 Use ``$prefixuwu add <titulo>,<conteudo>`` para adicionar um OwO

@@ -116,7 +116,7 @@ function call(arguments, msg) {
                 global.ReplyMessage(global.storage.LoadFile("image_removed", "uwu"), msg);
 
 
-                break;
+                return;
 
             default:
                 if (args[0].startsWith("#")) {

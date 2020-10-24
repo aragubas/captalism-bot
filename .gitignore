@@ -3,3 +3,5 @@ node_modules/
 .vscode/
 *.log
 .directory
+storage/uwu/tickets/
+storage/uwu/matches/
