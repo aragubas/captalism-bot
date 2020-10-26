@@ -51,6 +51,9 @@ global.client.on('message', msg => {
             var commandModule = require(moduleName);
             var messageArgument = msg.content.replace(global.Prefix, "").replace(command, "").trimStart();
 
+            // Check if user is not blacklisted
+            if (global.UserIsOnBlacklist(msg.author.id)) { global.ReplyMessage(global.storage.LoadFile("blacklisted_user_error"), msg); console.log("Discord : User has been blacklisted."); return; }
+
             // Check if user has access to the module
             if (!global.GetModuleAccessLevel(moduleName, msg)) { console.log("Discord : User does not has access to command."); return; }
 

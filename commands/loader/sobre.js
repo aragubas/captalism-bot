@@ -16,7 +16,7 @@
 
 // Command Call
 function call(arguments, msg) {
-    global.ReplyMessage(storage.LoadFile("lorem", "strings"), msg)
+    global.ReplyMessage(storage.LoadFile("about", "strings"), msg)
 }
 
 // Make the command callable

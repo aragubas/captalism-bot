@@ -20,7 +20,7 @@ function call(arguments, msg) {
     var args = arguments.split(" ");
     var MessageCanSend = true;
 
-    var RandomMax = Number(global.storage.LoadFile("matches/max", "uwu"));
+    var RandomMax = Number(global.storage.LoadFile("max_matches", "uwu"));
     var MessageNumber = global.random_between(0, RandomMax);
 
     if (args.length != 0) {

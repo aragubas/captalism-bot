@@ -56,8 +56,8 @@ function call(arguments, msg) {
 
 
                 // Changed loaded list
-                var Index = CurrentADMList.indexOf(UserIDRemove)
-                CurrentADMList.splice(Index, 1);
+                var index = CurrentADMList.indexOf(UserIDRemove)
+                CurrentADMList.splice(index, 1);
 
                 var UsersAdmString = "";
 
@@ -81,12 +81,120 @@ function call(arguments, msg) {
                 var AllAdmStrings = "";
 
                 CurrentADMList.forEach(item => {
-                    AllAdmStrings += "<@" + item + ">\n";
+                    if (item != "") {
+                        AllAdmStrings += "<@" + item + ">\n";
+                    }
                 });
 
-                global.ReplyMessage(AllAdmStrings, msg);
+                global.ReplyMessage(global.storage.LoadFile("all_adms", "sys/adm_tools/list_adms").replace("{0}", AllAdmStrings), msg);
 
                 return;
+
+            case "list_blacklisted":
+                var CurrentBlacklistedList = storage.LoadFile("blacklist").split('|');
+
+                var AllAdmStrings = "";
+
+                CurrentBlacklistedList.forEach(item => {
+                    if (item != "") {
+                        AllAdmStrings += "<@" + item + ">\n";
+                    }
+                });
+
+                if (AllAdmStrings == "") {
+                    global.ReplyMessage(global.storage.LoadFile("no_blacklisted", "sys/adm_tools/list_blacklisted").replace("{0}", AllAdmStrings), msg);
+                    return;
+
+                }
+
+                global.ReplyMessage(global.storage.LoadFile("all_blacklisted", "sys/adm_tools/list_blacklisted").replace("{0}", AllAdmStrings), msg);
+                return;
+
+
+            case "remove_blacklist":
+                var UserIDRemove = args[1];
+                var CurrentBlacklistedList = storage.LoadFile("blacklist").split('|');
+
+                // Check if UserID Box is an number
+                if (isNaN(UserIDRemove)) {
+                    global.ReplyMessage(global.storage.LoadFile("invalid_user_id", "sys/adm_tools/add_adm"), msg)
+                    return;
+                }
+
+                // Check if user is the bot owner
+                if (UserIDRemove == storage.LoadFile("owner")) {
+                    global.ReplyMessage(global.storage.LoadFile("user_is_bot_owner", "sys/adm_tools/remove_blacklist"), msg)
+                    return;
+                }
+
+                // Check if user is an administrator
+                if (!global.UserIsOnBlacklist(UserIDRemove)) {
+                    global.ReplyMessage(global.storage.LoadFile("user_not_blacklist", "sys/adm_tools/remove_blacklist"), msg)
+                    return;
+                }
+
+                // Changed loaded list
+                var index = CurrentBlacklistedList.indexOf(UserIDRemove)
+                CurrentBlacklistedList.splice(index, 1);
+
+                var UsersAdmString = "";
+
+                CurrentBlacklistedList.forEach(item => {
+                    // Check if item is an number
+                    if (!isNaN(item)) { UsersAdmString += item + "|"; }
+
+                });
+
+                UsersAdmString = UsersAdmString.replace("||", "|");
+
+                global.storage.WriteFile("blacklist.data", UsersAdmString)
+
+                global.ReplyMessage(global.storage.LoadFile("blacklist_removed", "sys/adm_tools/remove_blacklist"), msg)
+
+                break;
+
+
+            case "add_blacklist":
+                var UserIDToAdd = args[1];
+                var CurrentADMList = storage.LoadFile("blacklist").split('|');
+
+                // Check if UserID Box is an number
+                if (isNaN(UserIDToAdd)) {
+                    global.ReplyMessage(global.storage.LoadFile("invalid_user_id", "sys/adm_tools/add_adm"), msg)
+                    return;
+                }
+
+                // Check if user isn't already an administrator
+                if (global.UserIsAdministratorByUserID(UserIDToAdd)) {
+                    global.ReplyMessage(global.storage.LoadFile("already_blacklisted", "sys/adm_tools/add_adm"), msg)
+                    return;
+                }
+
+                // Check if user is the bot owner
+                if (UserIDToAdd == storage.LoadFile("owner")) {
+                    global.ReplyMessage(global.storage.LoadFile("user_is_bot_owner", "sys/adm_tools/add_adm"), msg)
+                    return;
+                }
+
+                // Change Loaded List
+                CurrentADMList.push(UserIDToAdd);
+
+                var UsersAdmString = "";
+
+                CurrentADMList.forEach(item => {
+                    // Check if item is an number
+                    if (!isNaN(item)) { UsersAdmString += item + "|"; }
+
+                });
+
+                UsersAdmString = UsersAdmString.replace("||", "|");
+
+                global.storage.WriteFile("blacklist.data", UsersAdmString)
+
+                global.ReplyMessage(global.storage.LoadFile("new_blacklisted_user", "sys/adm_tools/add_adm"), msg)
+
+                break;
+
 
             case "add_adm":
                 var UserIDToAdd = args[1];

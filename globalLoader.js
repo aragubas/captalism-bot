@@ -171,5 +171,17 @@ function ModuleExists(moduleName) {
 }
 
 global.ModuleExists = ModuleExists;
+///////////////////////////////////////////////////////////////////
+function UserIsOnBlacklist(user_id) {
+    // Check current user level
+    var BlacklistedUsers = storage.LoadFile("blacklist").split('|');
+
+    return BlacklistedUsers.indexOf(user_id) != -1;
+}
+
+global.UserIsOnBlacklist = UserIsOnBlacklist;
+///////////////////////////////////////////////////////////////////
+
+
 
 console.log("Done");
