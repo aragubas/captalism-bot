@@ -29,6 +29,7 @@ function LoadFile(fileName, folder = "sys") {
         }
     }).trimEnd();
 
+    // Limit FileData Size
     if (FileData.length >= 2000) {
         throw "FileData cannot be grather than 2000 characters.";
     }

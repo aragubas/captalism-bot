@@ -1,0 +1,23 @@
+-- Informaçoes da Mensagem:
+Titulo:
+``$msg_title``
+
+Conteudo:
+``$msg_content``
+
+ID:
+$msg_id
+
+-- Informaçoes do Autor --
+ID do autor:
+``$author_id``
+
+Nome de usuario/discriminador do autor:
+``$author_username#$author_discriminator``
+
+Autor é bot?:
+``$author_is_bot``
+*True = Sim, False = Não*
+
+Conta do autor criada em:
+``$author_created_at``

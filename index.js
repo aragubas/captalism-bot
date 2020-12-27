@@ -15,9 +15,9 @@
 */
 
 // Load all initial global wax
-const globalLoader = require("./globalLoader");
+require("./globalLoader");
 // Load the command module
-const commands = require("./commands/index");
+require("./commands/index");
 
 // Log In the Discord Client
 global.client.login(storage.LoadFile("token"));
@@ -56,6 +56,7 @@ global.client.on('message', msg => {
 
             // Check if user has access to the module
             if (!global.GetModuleAccessLevel(moduleName, msg)) { console.log("Discord : User does not has access to command."); return; }
+            console.log("Executing command: ($c) with arguments ($a)".replace("$c", moduleName).replace("$a", messageArgument))
 
             commandModule.call(messageArgument, msg);
 

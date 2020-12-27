@@ -22,6 +22,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 const storage = require("./storage");
 var path = require('path');
+const { Console, exception } = require('console');
 var StartPath = path.dirname(require.main.filename);
 
 global.Discord = Discord;
@@ -180,6 +181,35 @@ function UserIsOnBlacklist(user_id) {
 }
 
 global.UserIsOnBlacklist = UserIsOnBlacklist;
+///////////////////////////////////////////////////////////////////
+function UserIDFilter(input) {
+    // Remove whitespace and define Output variable
+    input = input.replace(" ", "");
+    var Output = "";
+
+    // Input is a user mention
+    if (input.includes("<@!")) {
+        Output = input.replace("<@!", "").replace(">", "");
+
+    } else {
+        // Check if string is a number
+        if (isNaN(input)) {
+            console.log("Entred string is a number.")
+            throw "Input string is not a number.";
+
+        } else {
+            Output = input;
+
+        }
+
+    }
+
+    console.log("--\nUserIDFilter\nOutput: '" + Output + "'. \n--")
+
+    return Output
+}
+
+global.UserIDFilter = UserIDFilter;
 ///////////////////////////////////////////////////////////////////
 
 

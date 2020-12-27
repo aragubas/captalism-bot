@@ -16,19 +16,8 @@
 
 // Command Function Call
 function call(arguments, msg) {
-    if (arguments == "") {
-        global.ReplyMessage(global.storage.LoadFile("empty_message", "say"), msg)
-        return;
-    }
-    // Delete the message
-    msg.delete();
-
-    if (msg.author.bot) {
-        global.ReplyMessage(global.storage.LoadFile("author_bot", "say"), msg)
-        return;
-    }
-
-    global.ReplyMessage(arguments, msg)
+    global.ReplyMessage(global.storage.LoadFile("default", "nsfw"), msg)
 }
 
+// Make the command callable
 exports.call = call;

@@ -17,14 +17,22 @@
 // Command Function Call
 
 function call(arguments, msg) {
+    // Split arguments
     var args = arguments.split(" ");
+    // If true, a message can be sent
     var MessageCanSend = true;
 
+    // Generate Random Message Number
     var RandomMax = Number(global.storage.LoadFile("max_matches", "uwu"));
+    // Get a random number from the random number output
     var MessageNumber = global.random_between(0, RandomMax);
 
+    // Check if message has arguments
     if (args.length != 0) {
         switch (args[0]) {
+            //
+            // Command for adding messages
+            //
             case "add":
                 var ImageName = arguments.split(",")[0].replace("add ", "");
                 var ImageContent = arguments.split(",")[1];
@@ -48,9 +56,10 @@ function call(arguments, msg) {
                 global.ReplyMessage(global.storage.LoadFile("file_added_new_id", "uwu").replace("{0}", String(ImageID)).replace("{1}", ImageName).replace("{2}", ImageContent), msg);
 
                 // Write the new max
-                global.storage.WriteFile("matches/max.data", String(ImageID), "uwu")
+                global.storage.WriteFile("max_matches.data", String(ImageID), "uwu")
 
                 // Create the Ticket for the added image
+                /*
                 var ticketData = "Titulo: " + ImageName + "\n" +
                     "Contudo: " + ImageContent + "\n\n" +
                     "ID: " + ImageID + "\n" +
@@ -59,12 +68,27 @@ function call(arguments, msg) {
                     "Discriminador do Usuario: " + msg.author.discriminator + "\n" +
                     "Usuario é um bot?: " + msg.author.bot + "\n" +
                     "Data criação do usuario: " + msg.author.createdAt;
+                */
+
+
+                var ticketData = global.storage.LoadFile("ticket_template", "uwu")
+                    .replace("$msg_title", ImageName)
+                    .replace("$msg_content", ImageContent)
+                    .replace("$msg_id", ImageID)
+                    .replace("$author_id", msg.author.id)
+                    .replace("$author_username", msg.author.username)
+                    .replace("$author_discriminator", msg.author.discriminator)
+                    .replace("$author_is_bot", msg.author.bot)
+                    .replace("$author_created_at", msg.author.createdAt)
 
                 global.storage.WriteFile("tickets/" + String(ImageID) + ".data", ticketData, "uwu")
                 global.ReplyMessage(global.storage.LoadFile("ticket_created", "uwu"), msg);
 
                 return;
 
+            //
+            // View a message Ticket Contents
+            //
             case "ticket_view":
                 var TicketID = args[1];
                 var ticketData = global.storage.LoadFile("tickets/" + String(TicketID), "uwu");
@@ -87,10 +111,16 @@ function call(arguments, msg) {
 
                 return;
 
+            //
+            // Say the total of the messages
+            //
             case "total":
                 global.ReplyMessage(global.storage.LoadFile("total_msg", "uwu").replace("{0}", String(RandomMax)), msg);
                 return;
 
+            //
+            // (Administrators Only) Remove message
+            //
             case "remove":
                 var ImageID = args[1];
 
@@ -112,13 +142,26 @@ function call(arguments, msg) {
                     return;
                 }
 
+                //
+                // Delete the file
+                //
                 global.storage.DeleteFile(ImageID + ".data", "uwu/matches");
+
+                //
+                // Say Image Removed Message
+                //
                 global.ReplyMessage(global.storage.LoadFile("image_removed", "uwu"), msg);
 
 
                 return;
 
+            //
+            // If no argument was provided
+            //
             default:
+                //
+                // Check if messages starts with '#' token
+                //
                 if (args[0].startsWith("#")) {
                     var wax = parseInt(args[0].replace("#", ""));
                     console.log(wax);
@@ -155,6 +198,8 @@ function call(arguments, msg) {
         var Tries = 0;
         var Found = false;
 
+
+        // Loops with no valid image was found
         while (!Found) {
             if (Tries >= 5) {
                 global.ReplyMessage(global.storage.LoadFile("maximum_tries_excedded", "uwu"), msg);
@@ -191,7 +236,7 @@ function ReplyImgID(ImageID, msg) {
         return;
     }
 
-    var UwUContent = global.storage.LoadFile("matches/" + String(ImageID), "uwu");
+    var UwUContent = global.storage.LoadFile(String(ImageID), "uwu/matches");
 
     var Message = "ID:" + String(ImageID) + "\n" + UwUContent;
 
