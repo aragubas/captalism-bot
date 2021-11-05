@@ -7,7 +7,3 @@ discord.js
 
 ## Como Executar?
 apenas rode ``node index.js`` na pasta raiz de tudo
-
-### Servidor de Sandbox:
-https://discord.gg/jjCEdNR
-
